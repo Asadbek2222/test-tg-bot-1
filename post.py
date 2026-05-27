@@ -2,15 +2,15 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message
 from aiogram.filters import Command
 import asyncio
+import os
 
-TOKEN = "BOT_TOKEN"
+TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 settings = {}
-step = {}   # 0 = ничего, 1 = ждём сообщение, 2 = ждём время
-
+step = {}
 temp_data = {}
 
 @dp.message(Command("setup"))
@@ -29,7 +29,7 @@ async def setup(message: Message):
     step[message.from_user.id] = 1
     temp_data[message.from_user.id] = message.chat.id
 
-    await message.answer("Отправь сообщение (текст, фото, стикер, эмодзи)")
+    await message.answer("Отправь сообщение")
 
 @dp.message(Command("stop"))
 async def stop(message: Message):
@@ -54,7 +54,6 @@ async def handler(message: Message):
 
     chat_id = temp_data[user_id]
 
-    # ШАГ 1: сохраняем сообщение
     if step[user_id] == 1:
 
         settings[chat_id] = {
@@ -68,12 +67,10 @@ async def handler(message: Message):
         await message.answer("Теперь отправь время в секундах")
         return
 
-    # ШАГ 2: время
     if step[user_id] == 2:
 
         try:
             settings[chat_id]["interval"] = int(message.text)
-
             await message.answer("Готово")
         except:
             await message.answer("Нужно число")
