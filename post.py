@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import asyncio
 import os
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("8915545889:AAE4izMkcf1Je2rQXvx0SoxiZ8d1kAhcBNc")
 
 OWNER_USERNAME = "CreeperBc"
 
@@ -112,6 +112,7 @@ async def mod_system(message: Message):
         return
 
     cmd = args[0]
+
 
     levels = {
         "модер1": 1,
